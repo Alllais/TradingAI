@@ -15,8 +15,8 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import load_model
 
-path = "C:\\Users\\Computing\\Desktop\\super secret files" # Root folder containing the model
-pathImages = "C:\\Users\\Computing\\Desktop\\super secret files\\War crimes evidence" # File path for the graphs output
+path = "C:\\Users\\Computing\\Desktop\\TradingAI-main" # Root folder containing the model
+pathImages = "C:\\Users\\Computing\\Desktop\\TradingAI-main\\images" # File path for the graphs output
 
 # Check for existing model
 model_filename = "model.keras"
@@ -68,7 +68,7 @@ class TradingEnv(gym.Env):
     """A simple trading environment for OpenAI gym"""
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, data, debug = False, initial_balance=100000, lookback_window_size=200, asset_holding = 0):
+    def __init__(self, data, debug = False, initial_balance=10000, lookback_window_size=200, asset_holding = 0):
         super(TradingEnv, self).__init__()
 
         # Debug mode
@@ -290,7 +290,7 @@ action_size = env.action_space.n
 model = check_and_load_model(model_path, input_shape=state_size, action_size=action_size)
 agent = QLearningAgent(model = model, action_size=action_size)
 # Step 3: Training Loop
-num_episodes = 200  # Number of episodes for training
+num_episodes = 100  # Number of episodes for training
 
 for e in range(num_episodes):
     #env.render()
