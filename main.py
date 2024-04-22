@@ -68,7 +68,7 @@ class TradingEnv(gym.Env):
     """A simple trading environment for OpenAI gym"""
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, data, debug = False, initial_balance=1000, lookback_window_size=200, asset_holding = 0):
+    def __init__(self, data, debug = False, initial_balance=100000, lookback_window_size=200, asset_holding = 0):
         super(TradingEnv, self).__init__()
 
         # Debug mode
@@ -101,7 +101,7 @@ class TradingEnv(gym.Env):
         reward = 0
 
         if action == 0: # Hold
-          reward -= 10
+          reward -= 5
           pass
 
         elif action == 1:  # Buy
@@ -109,14 +109,14 @@ class TradingEnv(gym.Env):
                 self.balance -= current_price
                 self.asset_holding += 1
             else:
-                reward -= 10  # Penalty for trying to buy without enough balance
+                reward -= 20  # Penalty for trying to buy without enough balance
 
         elif action == 2:  # Sell
             if self.asset_holding > 0:
                 self.balance += current_price
                 self.asset_holding -= 1
             else:
-                reward -= 10  # Penalty for trying to sell without holding any assets
+                reward -= 20  # Penalty for trying to sell without holding any assets
 
         net_worth = self.balance + (self.asset_holding * current_price)
 
@@ -141,10 +141,10 @@ class TradingEnv(gym.Env):
         
 
         # take market context into account when rewarding the agent
-        #if action == 1 and self.balance > current_price * 1.1:  # Buying with a buffer
-        #  reward += 10  # Encourage buying with a safety margin
-        #elif action == 2 and self.asset_holding > 1:
-        #  reward += 10  # Encourage selling when holding multiple assets
+        if action == 1 and self.balance > current_price * 1.1:  # Buying with a buffer
+          reward += 10  # Encourage buying with a safety margin
+        elif action == 2 and self.asset_holding > 1:
+          reward += 10  # Encourage selling when holding multiple assets
 
         #Market awarness rewarding strategy
         #if np.mean(self.data[max(0, self.n_step - 5):self.n_step + 1]) < current_price:
