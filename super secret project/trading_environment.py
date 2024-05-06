@@ -45,7 +45,7 @@ class TradingEnv(gym.Env):
         reward = 0
 
         if action == 0: # Hold
-          self.illegal_hold_attempts += 15
+          self.illegal_hold_attempts += 0.1
           reward -= self.illegal_hold_attempts
           pass
 
@@ -56,8 +56,9 @@ class TradingEnv(gym.Env):
                 self.illegal_buy_attempts = 0
                 self.illegal_hold_attempts = 0
             else:
-                reward -= 2 * self.illegal_buy_attempts  # Penalty for trying to buy without enough balance
-                self.illegal_buy_attempts += 10
+                reward -=0.5
+                #reward -= self.illegal_buy_attempts  # Penalty for trying to buy without enough balance
+                #self.illegal_buy_attempts += 1
 
         elif action == 2:  # Sell
             if self.asset_holding > 0:
@@ -66,15 +67,16 @@ class TradingEnv(gym.Env):
                 self.illegal_sell_attempts = 0
                 self.illegal_hold_attempts = 0
             else:
-                reward -= 2 * self.illegal_sell_attempts  # Penalty for trying to sell without holding any assets
-                self.illegal_sell_attempts += 10
+                reward -= 0.5
+                #reward -= self.illegal_sell_attempts  # Penalty for trying to sell without holding any assets
+                #self.illegal_sell_attempts += 1
 
         net_worth = self.balance + (self.asset_holding * current_price)
 
-        #if (net_worth >= self.initial_balance):
-          #reward += (net_worth - self.initial_balance)
-        #else:
-        #  reward -= 50
+        if (net_worth >= self.initial_balance):
+          reward += 0.5
+        else:
+          reward -= 0.5
           
         # Update reward based on the change in net worth
         # Dynamic Reward system
@@ -84,11 +86,11 @@ class TradingEnv(gym.Env):
 
         # change the worth based on each step
         
-        reward += (net_worth - self.last_net_worth) * 10
+        #reward += (net_worth - self.last_net_worth)
 
-        self.last_net_worth = net_worth
-        
-        if (net_worth == 495.83): reward=-1000
+        #self.last_net_worth = net_worth
+
+        #if (net_worth == 495.83): reward=-1000
         
         #if (net_worth > )
 
@@ -192,6 +194,7 @@ class TradingEnv(gym.Env):
             full_plot_path = os.path.join(save_path, plot_filename)
             plt.savefig(full_plot_path)
             print(f"Plot for epoch {epoch} saved.")
+            plt.close()
 
         #plt.show()
         if close:

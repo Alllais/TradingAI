@@ -24,7 +24,7 @@ def main():
     #agent = QLearningAgent(model=model, action_size=action_size)
 
     # QLearningAgent Training Loop
-    num_episodes = 10  # Number of episodes for training
+    num_episodes = 300  # Number of episodes for training
     # for e in range(num_episodes):
     #     state = env.reset()
     #     state = np.reshape(state, [1, env.lookback_window_size])  # Reshape state to match the input shape of the model
@@ -42,6 +42,7 @@ def main():
 
     for episode in range(num_episodes):
         env.render(mode='file', save=True, epoch = episode)
+        env.rendering_data = {'prices' : [], 'actions': []}
         state = env.reset()
         done = False
         total_reward = 0
@@ -51,10 +52,10 @@ def main():
             next_state, reward, done, _  = env.step(action)
             agent.learn(state,action,reward,next_state, done)
             state = next_state
-            total_reward += reward
+            #total_reward += reward
 
 
-        print(f"Episode: {episode+1}, Total Reward: {total_reward}")
+        print(f"Episode: {episode+1}, Reward: {reward}")
 
 
     save_model(model, path)

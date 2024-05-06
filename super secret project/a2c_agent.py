@@ -23,6 +23,8 @@ def create_critic_model (state_size):
     return model
 
 class A2CAgent:
+    # stop logging
+    tf.keras.utils.disable_interactive_logging()
     def __init__(self, state_size, action_size):
         self.state_size = state_size
         self.action_size = action_size
@@ -45,6 +47,7 @@ class A2CAgent:
         critic_value = self.critic.predict(state)
 
         target = reward + (1 - int(done)) * self.gamma * critic_value_next
+        #print (f'This is the target: {target}')
         delta = target - critic_value
 
         actions = np.zeros([1, self.action_size])
