@@ -19,6 +19,19 @@ def create_q_model(input_shape, action_size):
     model.compile(loss='mse', optimizer=Adam(learning_rate=0.01))
     return model
 
+def create_ppo_model(input_shape, aciton_size):
+    inputs = Input(shape=(input_shape,))
+    x = Dense (128, activation = 'relu') (inputs)
+    x = Dense (64, activation = 'relu') (x)
+    action_probs = Dense (action_size, activation = 'softmax')(x)
+    values = Dense(1)(x)
+
+    model = Model (inputs = inputs, outputs = [action_probs, values])
+    model.compile (optimizer = Adam(learning_rate = 0.0003),
+                    loss = ['sparse_categorical_crossentropy', 'mse'])
+
+    return model
+
 def save_model(model, path, filename="model.keras"):
     full_path = os.path.join(path, filename)
     model.save(full_path)
