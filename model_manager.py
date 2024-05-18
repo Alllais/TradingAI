@@ -1,6 +1,6 @@
 import os
-from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential, load_model, Model
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.optimizers import Adam
 
 def check_and_load_model(model_path, input_shape, action_size):
@@ -9,7 +9,7 @@ def check_and_load_model(model_path, input_shape, action_size):
         return load_model(model_path)
     else:
         print("No existing model found. Creating a new one...")
-        return create_q_model(input_shape, action_size)
+        return create_ppo_model(input_shape, action_size)
     
 def create_q_model(input_shape, action_size):
     model = Sequential()
@@ -19,9 +19,11 @@ def create_q_model(input_shape, action_size):
     model.compile(loss='mse', optimizer=Adam(learning_rate=0.01))
     return model
 
-def create_ppo_model(input_shape, aciton_size):
+def create_ppo_model(input_shape, action_size):
     inputs = Input(shape=(input_shape,))
-    x = Dense (128, activation = 'relu') (inputs)
+    x = Dense (512, activation = 'relu') (inputs)
+    x = Dense (256, activation = 'relu') (x)
+    x = Dense (128, activation = 'relu') (x)
     x = Dense (64, activation = 'relu') (x)
     action_probs = Dense (action_size, activation = 'softmax')(x)
     values = Dense(1)(x)

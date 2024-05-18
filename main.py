@@ -6,15 +6,15 @@ from trading_environment import TradingEnv
 from q_learning_agent import QLearningAgent
 from a2c_agent import A2CAgent
 from ppo_agent import PPOAgent
-path = "C:\\Users\\Computing\\Desktop\\super secret project" # Root folder containing the model
+path = "C:\\Users\\Games Lab\\Desktop\\TradingAI-main" # Root folder containing the model
 model_filename = "model.keras"
 model_path = os.path.join(path, model_filename)
 
 def main():
     # Fetch Stock Data
     symbol = 'AAPL'
-    start_date = '2024-01-01'
-    end_date = '2024-02-28'
+    start_date = '2023-08-17'
+    end_date = '2024-03-07'
     stock_prices = get_prices(symbol, start_date, end_date)
 
     # Initialize Environment and Agent
@@ -62,6 +62,8 @@ def main():
     agent = PPOAgent(model, action_size)
 
     for e in range(num_episodes):
+        env.render(mode = 'file', save = True, epoch=e)
+        env.rendering_data = {'prices' : [], 'actions': []}
         state = env.reset()
         states, actions, rewards, next_states, dones = [], [], [], [], []
 

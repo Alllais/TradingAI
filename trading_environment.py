@@ -189,7 +189,7 @@ class TradingEnv(gym.Env):
 
         # Save the plot with a unique name for each epoch
         if save and epoch is not None:
-            save_path = "C:\\Users\\Computing\\Desktop\\super secret project\\Images"
+            save_path = "C:\\Users\\Games Lab\\Desktop\\TradingAI-main\\Images"
             plot_filename = f'trading_plot_epoch_{epoch}.png'
             full_plot_path = os.path.join(save_path, plot_filename)
             plt.savefig(full_plot_path)
